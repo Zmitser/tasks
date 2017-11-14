@@ -1,5 +1,14 @@
-<ul class="list-group">
-    <li class="list-group-item">Cras justo odio</li>
-    <li class="list-group-item">Dapibus ac facilisis in</li>
-    <li class="list-group-item">Vestibulum at eros</li>
+<ul class="list-group" *ngFor="let task of tasks">
+    <li class="list-group-item">
+        <div class="form-check">
+            <label class="form-check-label">
+                <input type="checkbox"
+                       class="form-check-input"
+                       (change)="onTaskChange($event, task)"
+                       [checked]="task.completed">
+                <span ngClass="{{task.completed ? 'name completed' : 'name'}}">{{task.name}}</span>
+            </label>
+            <span class="badge {{ getDueDateByLabel(task) }} float-right">{{task.dueDate}}</span>
+        </div>
+    </li>
 </ul>
