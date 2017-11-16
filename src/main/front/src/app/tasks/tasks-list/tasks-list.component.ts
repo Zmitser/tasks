@@ -21,7 +21,10 @@ export class TasksListComponent implements OnInit {
                     console.log(data);
                     this.tasks = data
                 },
-                error => console.log(error))
+                error => console.log(error));
+        this._tasksService.onTaskAdded.subscribe((newTask:Task) => {
+            this.tasks.push(newTask)
+        })
     }
 
 
@@ -30,7 +33,9 @@ export class TasksListComponent implements OnInit {
     }
 
     onTaskChange(event, task){
-    console.log("Changed")
+        this._tasksService
+            .saveTask(task, event.target.checked)
+            .subscribe();
     }
 
 }

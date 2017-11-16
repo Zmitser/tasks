@@ -21,7 +21,9 @@ class CommandLineAppStartupRunner(private val taskRepository: TaskRepository) : 
                         Task("The Fluxxinator", LocalDate.now(), false),
                         Task("Back to the Future", LocalDate.now(), false),
                         Task("Meet the Fluxes", LocalDate.now(), false),
-                        Task("Lord of the Fluxes", LocalDate.now(), false)).toFlux()
-                        .flatMap { taskRepository.save(it) }).subscribe()
+                        Task("Lord of the Fluxes", LocalDate.now(), false))
+                        .toFlux()
+                        .flatMap { taskRepository.save(it) })
+                .subscribe()
     }
 }

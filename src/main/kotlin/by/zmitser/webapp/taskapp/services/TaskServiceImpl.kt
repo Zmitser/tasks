@@ -13,7 +13,10 @@ import reactor.core.publisher.Mono
 class TaskServiceImpl(private val taskRepository: TaskRepository,  private val modelMapper: ModelMapper) : TaskService {
 
 
-    override fun save(taskDto: Task): Mono<Task> = taskRepository.save(taskDto)
+    override fun save(taskDto: TaskDto): Mono<TaskDto> {
+        val task:Task = modelMapper.map(taskDto, Task::class.java)
+        return taskRepository.save(task).map { modelMapper.map(it, TaskDto::class.java) }
+    }
 
 
 

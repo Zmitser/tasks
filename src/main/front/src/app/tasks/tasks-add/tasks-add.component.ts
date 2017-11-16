@@ -1,4 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import {Task} from "../task";
+import * as moment from "moment";
+import {TasksService} from "../tasks.service";
 
 @Component({
   selector: 'app-tasks-add',
@@ -8,9 +11,20 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 })
 export class TasksAddComponent implements OnInit {
 
-  constructor() { }
+    addedTaskValue = '';
+
+  constructor(private _tasksService:TasksService ) { }
 
   ngOnInit() {
+  }
+
+  onTaskAdd(event){
+
+    let  task:Task = new Task(event.target.value, false, moment().format('DD/MM/YYYY'));
+    this._tasksService.addTask(task).subscribe((newTask:Task) => {
+        event.target.value = '';
+        this._tasksService.onTaskAdded.emit(newTask);
+    });
   }
 
 }

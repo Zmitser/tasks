@@ -1,6 +1,7 @@
 package by.zmitser.webapp.taskapp.handlers
 
 import by.zmitser.webapp.taskapp.domains.Task
+import by.zmitser.webapp.taskapp.dto.TaskDto
 import by.zmitser.webapp.taskapp.services.TaskService
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.ServerRequest
@@ -15,7 +16,7 @@ class TaskHandler(private val taskService: TaskService) {
     fun findAll(req:ServerRequest): Mono<ServerResponse> = ok().body(taskService.findAll())
 
     fun save(request:ServerRequest):Mono<ServerResponse>  {
-        val task:Mono<Task>  = request.bodyToMono(Task::class.java)
+        val task:Mono<TaskDto>  = request.bodyToMono(TaskDto::class.java)
         return ok().body(task.flatMap { taskService.save(it) })
     }
 }
