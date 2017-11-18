@@ -1,6 +1,11 @@
 import {Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {Task} from "../task";
 import {TasksService} from "../tasks.service";
+import {Store} from "@ngrx/store";
+import {ApplicationState} from "../../store/application-state";
+import {Observable} from "rxjs/Observable";
+import * as Actions from '../../actions/actions';
+
 
 @Component({
     selector: 'app-tasks-list',
@@ -8,34 +13,26 @@ import {TasksService} from "../tasks.service";
     styleUrls: ['./tasks-list.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-export class TasksListComponent implements OnInit {
-    tasks: Task[] = [];
+export class TasksListComponent implements OnInit{
 
-    constructor(private _tasksService:TasksService) {
+    tasks$: Observable<Task[]>;
+
+    constructor(private _tasksService:TasksService, private _store:Store<ApplicationState>) {
+             this.tasks$ = _store.select('tasks');
+
     }
 
-    ngOnInit() {
-        this._tasksService
-            .getTasks()
-            .subscribe((data:any[]) => {
-                    console.log(data);
-                    this.tasks = data
-                },
-                error => console.log(error));
-        this._tasksService.onTaskAdded.subscribe((newTask:Task) => {
-            this.tasks.push(newTask)
-        })
+    ngOnInit(): void {
+        this._store.dispatch(new Actions.LoadTaskAction())
     }
-
 
     getDueDateByLabel(task:Task) {
         return task.completed ? 'badge-success' : 'badge-primary';
     }
 
     onTaskChange(event, task){
-        this._tasksService
-            .saveTask(task, event.target.checked)
-            .subscribe();
+        task.completed = event.target.checked;
+        this._store.dispatch(new Actions.SaveTaskAction(task))
     }
 
 }

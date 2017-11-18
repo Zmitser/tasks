@@ -1,4 +1,4 @@
-<ul class="list-group" *ngFor="let task of tasks">
+<ul class="list-group" *ngFor="let task of tasks$ | async">
     <li class="list-group-item">
         <div class="form-check">
             <label class="form-check-label">
